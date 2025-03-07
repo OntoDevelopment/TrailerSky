@@ -14,12 +14,12 @@ use \Illuminate\Support\Carbon;
 class ScrapeChannels extends \App\Actions\AbstractAction
 {
 
-    use Traits\FetchesDetails;
+    use \App\Actions\Traits\FetchesDetails;
 
     public function run($params = [])
     {
         if (isset($params['id'])) {
-            $this->scrapeChannel($params['id']);
+            $this->scrapeChannel($params['id'], true);
         } else {
             $this->log("Scraping all channels");
             foreach (Channels::$list as $class) {
@@ -29,29 +29,28 @@ class ScrapeChannels extends \App\Actions\AbstractAction
         $this->log("Done at " . Carbon::now());
     }
 
-    protected function scrapeChannel($id)
+    protected function scrapeChannel($id, $force = false)
     {
-        $class = Channels::byId($id);
-        $channel = new $class();
-        $ChannelModel = Channel::find($class::$id);
+        $channel = Channels::byId($id);
+
+        $ChannelModel = Channel::find($channel::$id);
         if (!$ChannelModel) {
             $ChannelModel = new Channel();
-            $ChannelModel->id = $class::$id;
-            $ChannelModel->name = $channel::$name;
+            $ChannelModel->id = $channel::$id;
+            $ChannelModel->name = $channel->name();
             $ChannelModel->last_query = Carbon::now()->subDays(7);
             $ChannelModel->save();
         }
         // check if enough time has passed since last query
-        if ($ChannelModel->last_query->diffInHours() < $ChannelModel->wait_hours) {
+        if (!$force && $ChannelModel->last_query->diffInHours() < $ChannelModel->wait_hours) {
             return;
         }
-        $this->log("<b>{$channel::$name}</b>");
+        $this->log("<b>{$channel->name()}</b>");
         $this->log("Last query: " . $ChannelModel->last_query);
-
 
         try {
             // get videos since last query
-            $results = $channel->getRecent($ChannelModel->last_query->format('c'));
+            $results = $channel->getRecent($ChannelModel->last_query->subHour(1)->format(ZULU));
         } catch (\Exception $e) {
             $this->log("Error: " . $e->getMessage(), true);
             return;

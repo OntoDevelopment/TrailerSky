@@ -33,4 +33,16 @@ class Channel extends AppModel
     {
         return Channels::byId($this->id)::$hashtags;
     }
+
+    public function url(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => 'https://www.youtube.com/channel/' . $this->id
+        );
+    }
+
+    public function getUrl() : string
+    {
+        return 'https://www.youtube.com/channel/' . $this->id;
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Clients;
 
 use App\Models\Video;
+use App\Models\Post;
 
 class BlueSky
 {
@@ -24,36 +25,37 @@ class BlueSky
         return self::$postService;
     }
 
-    public static function initPost($content): Post
+    public static function initDraft($content): Draft
     {
-        $Post = Post::create($content);
-        $Post = self::postService()->addFacetsFromTags($Post);
-        return $Post;
+        $Draft = Draft::create($content);
+        $Draft = self::postService()->addFacetsFromTags($Draft);
+        return $Draft;
     }
 
-    protected static function createPost(Post $post): \potibm\Bluesky\Response\RecordResponse
+    protected static function createPost(Draft $Draft): \potibm\Bluesky\Response\RecordResponse
     {
-        return self::api()->createRecord($post);
+        return self::api()->createRecord($Draft);
     }
 
-    public static function post(Video $Video) : \potibm\Bluesky\Response\RecordResponse
+    public static function post(Post $Post) : \potibm\Bluesky\Response\RecordResponse
     {
-        $Post = self::initPost($Video->postGenerate(300, false));
-        $Post = $Post->attachYouTubeVideo($Video);
-        $response = self::createPost($Post);
+        $Video = Video::find($Post->video_id);
+        $Draft = self::initDraft($Post->content);
+        $Draft = $Draft->attachYouTubeVideo($Video);
+        $response = self::createPost($Draft);
         return $response;
     }
 }
 
-class Post extends \potibm\Bluesky\Feed\Post
+class Draft extends \potibm\Bluesky\Feed\Post
 {
     public static function create(string $text, string $lang = 'en'): self
     {
-        $post = new self();
-        $post->setText($text);
-        $post->setLangs([$lang]);
+        $Draft = new self();
+        $Draft->setText($text);
+        $Draft->setLangs([$lang]);
 
-        return $post;
+        return $Draft;
     }
 
     public function attachYouTubeVideo(Video $Video)

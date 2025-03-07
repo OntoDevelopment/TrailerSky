@@ -4,6 +4,8 @@ namespace App\Http\Clients;
 
 use \Illuminate\Support\Carbon;
 
+use App\Models\Video;
+
 class TMDB extends Client
 {
     public static function base(): string
@@ -11,10 +13,20 @@ class TMDB extends Client
         return 'https://api.themoviedb.org/3/';
     }
 
-    public static function search($title, $query = [])
+    public static function search($title, $type, $query = [])
     {
         $query['query'] = $title;
-        $url = self::base() . 'search/multi';
+        switch ($type) {
+            case 'movie':
+                $url = self::base() . 'search/movie';
+                break;
+            case 'tv':
+                $url = self::base() . 'search/tv';
+                break;
+            default:
+                $url = self::base() . 'search/multi';
+                break;
+        }
         $response = self::withHeaders(static::headers())->get($url, $query);
 
         if ($response->successful()) {
@@ -23,15 +35,38 @@ class TMDB extends Client
         $response->throw();
     }
 
-    public static function find($title, \App\Models\Video $Video)
+    public static function guessType(Video $Video)
     {
-        $results = TMDB::search($title);
+        $str = $Video->title . $Video->description;
+        if (stripos($str, 'all episodes') !== false) {
+            return 'tv';
+        }
+        if (stripos($str, 'in theater') !== false) {
+            return 'movie';
+        }
+        if (stripos($str, 'episodes') !== false) {
+            return 'tv';
+        }
+        return false;
+    }
+
+    public static function find($title, Video $Video)
+    {
+        $media_type = self::guessType($Video);
+        $results = TMDB::search($title, $media_type);
+        // set media type to movie if it's a movie
+        $results = array_map(function ($result) use ($media_type) {
+            if(empty($result['media_type'])) {
+                $result['media_type'] = $media_type;
+            }
+            return $result;
+        }, $results);
         // filter out results with non-matching title
         $results = array_filter($results, function ($result) use ($title) {
             if ($result['media_type'] == 'movie') {
-                return ci_compare($result['title'], $title);
+                return title_compare($result['title'], $title);
             } else {
-                return ci_compare($result['name'], $title);
+                return title_compare($result['name'], $title);
             }
         });
 
@@ -40,23 +75,44 @@ class TMDB extends Client
             return in_array($result['media_type'], ['movie', 'tv']);
         });
 
-        if ($Video->isSeason()) {
-            // filter out results with release date in the past
-            $results = array_filter($results, function ($result) {
-                $date_string = $result['media_type'] == 'movie' ? $result['release_date'] : $result['first_air_date'];
-                return Carbon::parse($date_string)->isFuture();
-            });
-        }
+        $results = array_filter($results, function ($result) {
+            if ($result['media_type'] == 'tv') {
+                return true;
+            }
+            if(empty($result['release_date'])){
+                return true; // release date is probably not announced yet or input into TMDB
+            }
+            // if release date is in the future, return true
+            if (!empty($result['release_date']) && Carbon::parse($result['release_date'])->isFuture()) {
+                return true;
+            }
+            return false;
+        });
 
         // sort by release date
         usort($results, function ($a, $b) {
-            $a_date = $a['media_type'] == 'movie' ? $a['release_date'] : $a['first_air_date'];
-            $b_date = $b['media_type'] == 'movie' ? $b['release_date'] : $b['first_air_date'];
-            return $b_date <=> $a_date;
+            return self::bestAirdate($b) <=> self::bestAirdate($a);
         });
 
         foreach ($results as $result) {
             return $result;
+        }
+        return null;
+    }
+
+    public static function bestAirdate($details)
+    {
+        if (!empty($details['media_type']) && $details['media_type'] == 'movie' && !empty($details['release_date'])) {
+            return $details['release_date'];
+        }
+        if (!empty($details['next_episode_to_air']) && !empty($details['next_episode_to_air']['air_date'])) {
+            return $details['next_episode_to_air']['air_date'];
+        }
+        if (!empty($details['last_episode_to_air']) && !empty($details['last_episode_to_air']['air_date'])) {
+            return $details['last_episode_to_air']['air_date'];
+        }
+        if (!empty($details['first_air_date'])) {
+            return $details['first_air_date'];
         }
         return null;
     }

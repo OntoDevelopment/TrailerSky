@@ -37,6 +37,18 @@ return [
             'throw' => false,
         ],
 
+        'notifications' => [
+            'driver' => 'local',
+            'root' => storage_path('notifications'),
+            'throw' => false,
+        ],
+
+        'logs' => [
+            'driver' => 'local',
+            'root' => storage_path('logs'),
+            'throw' => false,
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

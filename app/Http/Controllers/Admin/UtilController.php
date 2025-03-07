@@ -55,7 +55,7 @@ class UtilController extends AdminController
                 'media_type' => $media_type,
                 'tmdb_popularity' => round($details['popularity'], 3),
                 'imdb_id' => $details['imdb_id'] ?? null,
-                'release_date' => $media_type == 'movie' ? $details['release_date'] : $details['first_air_date']
+                'release_date' => TMDB::bestAirdate($details),
             ]);
             $Media->save();
         }
@@ -88,8 +88,16 @@ class UtilController extends AdminController
                 return Actions\BlueSky\Post::class;
             case 'scrapeYouTubeChannels':
                 return Actions\YouTube\ScrapeChannels::class;
+            case 'searchYouTube':
+                return Actions\YouTube\Search::class;
             case 'fetchYouTubeDetails':
                 return Actions\YouTube\FetchDetails::class;
+            case 'importYouTube':
+                return Actions\YouTube\ImportVideo::class;
+            case 'updateMedia':
+                return Actions\TMDB\UpdateMedia::class;
+            case 'subscribe':
+                return Actions\PubSubHubBub\Subscribe::class;
             default:
                 return false;
         }

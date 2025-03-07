@@ -8,6 +8,13 @@ abstract class AbstractAction
 
     abstract public function run($params = []);
 
+    public static function exec($params = [])
+    {
+        $Action = new static;
+        $Action->run($params);
+        return $Action;
+    }
+
     public function log($message, $error = false)
     {
         $this->log[] = (object) [

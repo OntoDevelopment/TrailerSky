@@ -16,19 +16,22 @@ class YouTube extends Client
         $response = self::get(self::base() . 'search', $query);
 
         if ($response->successful()) {
-            return $response->json()['items'];
+            return $response->json();
         }
         $response->throw();
     }
 
-    public static function video($id)
+    public static function video($id, array $query = []): array
     {
-        $query = [
-            'id' => $id,
-            'part' => 'snippet,contentDetails,statistics',
-        ];
-        $response = self::get(self::base() . 'videos', $query);
+        $query['key'] = config('services.youtube.key');
+        $query['id'] = $id;
+        $query['part'] = $query['part'] ?? 'snippet,contentDetails,statistics';
 
-        return $response['items'][0];
+        $response = self::get(self::base() . 'videos', $query);
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        $response->throw();
     }
 }

@@ -1,3 +1,4 @@
+<h2>Need Review</h2>
 <table class="table table-striped">
     <thead>
         <tr>
@@ -9,7 +10,7 @@
             <tr>
                 <td>
                     {{ $Video->title }} <a href="{{ $Video->youtubeUrl() }}" target="_blank"><i class="fab fa-youtube"></i></a>
-                    <br />{{ $Video->channel->name }} at {{ $Video->created_at->format('F jS, Y g:i A') }}
+                    <br />{{ $Video->channel_name }} at {{ $Video->created_at->format('F jS, Y g:i A') }}
                 </td>
                 <td>
                     <div class="btn-group">

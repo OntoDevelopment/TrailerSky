@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\YouTube\Traits;
+namespace App\Actions\Traits;
 
 use App\Http\Clients\TMDB;
 use App\Models\Video;
@@ -9,16 +9,23 @@ use App\Models\Hashtag;
 
 use App\Http\YouTube\Channels;
 
-trait FetchesDetails {
+trait FetchesDetails
+{
+    /**
+     * Fetch details from TMDB and update the video
+     *
+     * @param Video $Video
+     * @return Video
+     */
     protected function fetchDetails(Video $Video)
     {
-        $Channel = new (Channels::byId($Video->channel_id));
+        $Channel = Channels::byId($Video->channel_id);
         $media_title = $Channel->videoMediaTitle($Video->title);
         $this->log("Media title: \"{$media_title}\"");
         $result = TMDB::find($media_title, $Video);
 
         if (!$result) {
-            $this->log("No results found on TMDB");
+            $this->log("No results found on TMDB. Type: {$Video->guessType('multi')}");
             return;
         } else {
             $this->log("TMDB: {$result['id']}");
@@ -27,15 +34,23 @@ trait FetchesDetails {
             $Video->type = $Channel->videoType($Video->title)->enum();
         }
         $Media = $this->findMedia($result);
+        $Media = $this->syncTMDB($Media);
+        $Video->media_id = $Media->id;
+        $Video->save();
+        return $Video;
+    }
 
-        $details = TMDB::details($result['id'], $result['media_type']);
-
-        $Media->tmdb_popularity = round($result['popularity'], 3);
-        $Media->imdb_id = $details['imdb_id'] ?? null;
-        $release_date = $result['media_type'] == 'movie' ? $details['release_date'] : $details['first_air_date'];
-        if($release_date) {
-            $Media->release_date = $release_date;
+    protected function syncTMDB($Media)
+    {
+        $details = TMDB::details($Media->tmdb_id, $Media->media_type);
+        $Media->tmdb_popularity = round($details['popularity'], 3);
+        if(!empty($details['imdb_id'])) {
+            $Media->imdb_id = $details['imdb_id'];
         }
+        if (TMDB::bestAirdate($details)) {
+            $Media->release_date = TMDB::bestAirdate($details);
+        }
+        $Media->tmdb_poster_path = $details['poster_path'] ?? null;
 
         // build hashtags
         $hashtags = [];
@@ -48,13 +63,11 @@ trait FetchesDetails {
         // attach hashtags to media
         $Media->hashtags()->sync($hashtags);
 
-        $Video->media_id = $Media->id;
-        $Video->save();
-
         $Media->save();
+        return $Media;
     }
 
-    private function findMedia($result)
+    protected function findMedia($result)
     {
         $Media = Media::where('tmdb_id', $result['id'])->first();
         if (!$Media) {

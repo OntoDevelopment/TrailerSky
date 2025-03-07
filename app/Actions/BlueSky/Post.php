@@ -22,16 +22,21 @@ class Post extends AbstractAction
             $this->log('Video not found', true);
             return;
         }
+
+        $Post = new PostModel();
+        $Post->video_id = $Video->id;
+        $Post->platform = 'bluesky';
+        $Post->content = $Video->postGenerate(300);
+        $Post->save();
+
         try {
-            $response = BlueSky::post($Video);
+            $response = BlueSky::post($Post);
         } catch (\Exception $e) {
             $this->log($e->getMessage(), true);
             return;
         }
         $this->log('Posted to BlueSky');
-        $Post = new PostModel();
-        $Post->video_id = $Video->id;
-        $Post->platform = 'bluesky';
+  
         $Post->platform_id = $response->getCid();
         $Post->save();
         $this->log('Post recorded');

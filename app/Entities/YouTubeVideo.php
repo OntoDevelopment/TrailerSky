@@ -17,7 +17,7 @@ class YouTubeVideo
 
     public function id(): string
     {
-        return $this->data['id']['videoId'];
+        return is_array($this->data['id']) ? $this->data['id']['videoId'] : $this->data['id'];
     }
 
     public function snippet(): array
