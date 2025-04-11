@@ -3,7 +3,6 @@
 namespace App\Orchid\Screens\Media;
 
 use App\Models\Media;
-
 use Illuminate\Http\Request;
 use Orchid\Support\Facades\Toast;
 
@@ -28,8 +27,6 @@ class MediaEditScreen extends \App\Orchid\Screens\AppScreen
 
     /**
      * The name of the screen displayed in the header.
-     *
-     * @return string|null
      */
     public function name(): ?string
     {

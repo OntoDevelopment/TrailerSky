@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Entities\VideoType;
 
-class Undefined extends \App\Entities\VideoType {
+class Undefined extends \App\Entities\VideoType
+{
     public static function enum(): string
     {
         return 'undefined';

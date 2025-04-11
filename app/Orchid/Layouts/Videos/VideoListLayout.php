@@ -2,11 +2,10 @@
 
 namespace App\Orchid\Layouts\Videos;
 
+use Orchid\Screen\Actions;
+use Orchid\Screen\Fields;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
-
-use Orchid\Screen\Fields;
-use Orchid\Screen\Actions;
 
 class VideoListLayout extends Table
 {
@@ -56,9 +55,10 @@ class VideoListLayout extends Table
                 ->align(TD::ALIGN_CENTER)
                 ->width('100px')
                 ->render(function ($video) {
-                    if(!$video->media_id) {
+                    if (! $video->media_id) {
                         return 'no media';
                     }
+
                     return Actions\Link::make('')
                         ->icon('bs.film')
                         ->route('platform.media.edit', $video->media_id);

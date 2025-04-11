@@ -2,9 +2,8 @@
 
 namespace App\Orchid\Screens\Media;
 
-use Orchid\Screen\Screen;
-
 use App\Models\Media;
+use Orchid\Screen\Screen;
 
 class MediaListScreen extends Screen
 {
@@ -16,15 +15,14 @@ class MediaListScreen extends Screen
     public function query(): iterable
     {
         $query = Media::filters()->defaultSort('created_at', 'desc');
+
         return [
-            'media' => $query->paginate()
+            'media' => $query->paginate(),
         ];
     }
 
     /**
      * The name of the screen displayed in the header.
-     *
-     * @return string|null
      */
     public function name(): ?string
     {
@@ -49,7 +47,7 @@ class MediaListScreen extends Screen
     public function layout(): iterable
     {
         return [
-           // \App\Orchid\Layouts\Media\MediaFiltersLayout::class,
+            // \App\Orchid\Layouts\Media\MediaFiltersLayout::class,
             \App\Orchid\Layouts\Media\MediaListLayout::class,
         ];
     }

@@ -2,24 +2,23 @@
 
 namespace App\View\Components;
 
+use App\Models\Hashtag;
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\View\Component;
-
 use Illuminate\Support\Facades\Cache;
-
-use App\Models\Hashtag;
+use Illuminate\View\Component;
 
 class HashtagList extends Component
 {
     public $hashtags;
+
     /**
      * Create a new component instance.
      */
     public function __construct(public string $scope)
     {
         $query = Hashtag::scopes($scope);
-        $this->hashtags = Cache::remember(hash_query($query), 5 * 60, fn() => $query->get());
+        $this->hashtags = Cache::remember(hash_query($query), 5 * 60, fn () => $query->get());
     }
 
     /**

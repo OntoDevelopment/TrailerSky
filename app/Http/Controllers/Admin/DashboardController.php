@@ -12,11 +12,12 @@ class DashboardController extends AdminController
             'to_post' => Video::toPost()->get(),
             'to_review' => Video::toReview()->get(),
         ];
-        
+
         return view('admin.dashboard', $vars);
     }
 
-    public function runplaceholder(){
+    public function runplaceholder()
+    {
         return view('admin.runplaceholder');
     }
 }

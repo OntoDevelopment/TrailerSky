@@ -2,14 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-
-use Illuminate\Database\Eloquent\Builder;
-
 use Illuminate\Database\Eloquent\Casts\Attribute;
-
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property mixed $id
@@ -18,9 +12,8 @@ use Illuminate\Support\Facades\Cache;
  */
 class AppModel extends Model
 {
-
     use \Orchid\Filters\Filterable;
-    
+
     protected $guarded = [];
 
     protected function casts(): array
@@ -36,11 +29,12 @@ class AppModel extends Model
         if ($length === false) {
             return Attribute::make();
         }
-        if (!$get) {
-            $get = fn($value) => $value;
+        if (! $get) {
+            $get = fn ($value) => $value;
         }
+
         return Attribute::make(
-            set: fn(string $value) => sublen(asci_chars($value), $length),
+            set: fn (string $value) => sublen(asci_chars($value), $length),
             get: $get
         );
     }

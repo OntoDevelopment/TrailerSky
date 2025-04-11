@@ -2,17 +2,16 @@
 
 namespace App\View\Components;
 
+use App\Models\Video;
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\View\Component;
-
-use App\Models\Video;
-
 use Illuminate\Support\Facades\Cache;
+use Illuminate\View\Component;
 
 class VideoList extends Component
 {
     public $videos;
+
     public $sql;
 
     /**
@@ -21,7 +20,7 @@ class VideoList extends Component
     public function __construct(public string $scope)
     {
         $query = Video::scopes($scope);
-        $this->videos = Cache::remember(hash_query($query), 5 * 60, fn() => $query->get());
+        $this->videos = Cache::remember(hash_query($query), 5 * 60, fn () => $query->get());
         //$this->sql = $query->toSql();
     }
 

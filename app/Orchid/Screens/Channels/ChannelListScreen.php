@@ -2,9 +2,8 @@
 
 namespace App\Orchid\Screens\Channels;
 
-use Orchid\Screen\Screen;
-
 use App\Models\Channel;
+use Orchid\Screen\Screen;
 
 class ChannelListScreen extends Screen
 {
@@ -16,15 +15,14 @@ class ChannelListScreen extends Screen
     public function query(): iterable
     {
         $query = Channel::filters()->defaultSort('name');
+
         return [
-            'channels' => $query->paginate(100)
+            'channels' => $query->paginate(100),
         ];
     }
 
     /**
      * The name of the screen displayed in the header.
-     *
-     * @return string|null
      */
     public function name(): ?string
     {

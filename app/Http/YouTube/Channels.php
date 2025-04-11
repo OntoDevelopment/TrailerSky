@@ -39,31 +39,32 @@ class Channels
 
     ];
 
-    public static function byId($id) : Channel
+    public static function byId($id): Channel
     {
         foreach (self::$list as $name => $class) {
             if ($class::$id == $id) {
                 return new $class($name);
             }
         }
-        $Channel = new Unknown();
+        $Channel = new Unknown;
         $Channel::$id = $id;
+
         return $Channel;
     }
 
-    public static function verifyChannel($channelId) : bool
+    public static function verifyChannel($channelId): bool
     {
         return in_array($channelId, self::ids());
     }
 
-    public static function byKey($key) : ?Channel
+    public static function byKey($key): ?Channel
     {
         return new self::$list[$key];
     }
 
-    public static function ids() : array
+    public static function ids(): array
     {
-        return array_map(function($class){
+        return array_map(function ($class) {
             return $class::$id;
         }, self::$list);
     }

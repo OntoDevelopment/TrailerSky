@@ -1,17 +1,17 @@
-<?php 
+<?php
 
 namespace App\Http\Clients;
 
 class PubSubHubBub extends Client
 {
-    public static function base() : string
+    public static function base(): string
     {
-        return "https://pubsubhubbub.appspot.com";
+        return 'https://pubsubhubbub.appspot.com';
     }
 
     public static function subscribe($id)
     {
-        $url = self::base() . "/subscribe";
+        $url = self::base() . '/subscribe';
         $data = [
             'hub.callback' => 'https://trailersky.com/subscriber/notify',
             'hub.topic' => 'https://www.youtube.com/feeds/videos.xml?channel_id=' . $id,
@@ -20,9 +20,9 @@ class PubSubHubBub extends Client
         ];
 
         $response = self::asForm()->post($url, $data);
-        
+
         // if response code == 204, then it's a success
-        if($response->status() == 204) {
+        if ($response->status() == 204) {
             return true;
         }
 
@@ -32,6 +32,7 @@ class PubSubHubBub extends Client
         ];
 
         $response->throw();
-        return ($response->status() == 204);
+
+        return $response->status() == 204;
     }
 }

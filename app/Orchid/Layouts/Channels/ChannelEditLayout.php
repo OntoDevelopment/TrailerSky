@@ -3,8 +3,6 @@
 namespace App\Orchid\Layouts\Channels;
 
 use Orchid\Screen\Fields;
-use Orchid\Screen\Actions;
-use Orchid\Support\Color;
 
 class ChannelEditLayout extends \Orchid\Screen\Layouts\Rows
 {

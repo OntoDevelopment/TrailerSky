@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
-
 use Orchid\Filters\Types as Filters;
 
 /**
@@ -21,12 +20,11 @@ use Orchid\Filters\Types as Filters;
  */
 class Media extends AppModel
 {
-
     protected $allowedFilters = [
         'title' => Filters\Like::class,
         'media_type' => Filters\WhereIn::class,
-        'created_at'    => Filters\WhereDateStartEnd::class,
-        'updated_at'    => Filters\WhereDateStartEnd::class,
+        'created_at' => Filters\WhereDateStartEnd::class,
+        'updated_at' => Filters\WhereDateStartEnd::class,
     ];
 
     protected $allowedSorts = [
@@ -35,7 +33,6 @@ class Media extends AppModel
         'created_at',
         'updated_at',
     ];
-
 
     // hasmany hashtags through media_hashtags
     public function hashtags()
@@ -52,15 +49,15 @@ class Media extends AppModel
     public function title(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => html_entity_decode($value),
-            set: fn($value) => html_entity_decode($value)
+            get: fn ($value) => html_entity_decode($value),
+            set: fn ($value) => html_entity_decode($value)
         );
     }
 
     public function posterUrl(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $this->getTmdbPosterUrl()
+            get: fn ($value) => $this->getTmdbPosterUrl()
         );
     }
 
@@ -69,13 +66,14 @@ class Media extends AppModel
         if ($this->tmdb_poster_path) {
             return 'https://image.tmdb.org/t/p/' . $size . $this->tmdb_poster_path;
         }
+
         return false;
     }
 
     public function tmdbUrl(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $this->getTmdbUrl()
+            get: fn ($value) => $this->getTmdbUrl()
         );
     }
 

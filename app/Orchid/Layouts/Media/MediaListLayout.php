@@ -2,11 +2,10 @@
 
 namespace App\Orchid\Layouts\Media;
 
+use Orchid\Screen\Actions;
+use Orchid\Screen\Fields;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
-
-use Orchid\Screen\Fields;
-use Orchid\Screen\Actions;
 
 class MediaListLayout extends Table
 {

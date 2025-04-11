@@ -2,12 +2,8 @@
 
 namespace App\Orchid\Screens\Channels;
 
-use Orchid\Screen\Screen;
-
 use App\Models\Channel;
-
-use Illuminate\Http\Request;
-use Orchid\Support\Facades\Toast;
+use Orchid\Screen\Screen;
 
 /**
  * @property Channel $channel
@@ -15,6 +11,7 @@ use Orchid\Support\Facades\Toast;
 class ChannelEditScreen extends Screen
 {
     public $channel;
+
     /**
      * Fetch data to be displayed on the screen.
      *
@@ -29,8 +26,6 @@ class ChannelEditScreen extends Screen
 
     /**
      * The name of the screen displayed in the header.
-     *
-     * @return string|null
      */
     public function name(): ?string
     {

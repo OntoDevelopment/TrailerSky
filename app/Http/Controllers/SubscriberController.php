@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Clients\YouTube;
-
-use App\Http\YouTube\Channels;
-
 use App\Entities\YouTubeVideo;
-
+use App\Http\Clients\YouTube;
+use App\Http\YouTube\Channels;
 use App\Models\Video;
+use Illuminate\Http\Request;
 
 class SubscriberController extends Controller
 {
@@ -41,7 +37,7 @@ class SubscriberController extends Controller
 
         $Notification = simplexml_load_string($request->getContent());
 
-        if (!$Notification) {
+        if (! $Notification) {
             return $this->log('Invalid notification xml');
         }
 
@@ -51,7 +47,7 @@ class SubscriberController extends Controller
         $name = $videoId . ' > ' . $title;
         $this->log($name);
 
-        if (!$videoId || !$channelId) {
+        if (! $videoId || ! $channelId) {
             return $this->log('Invalid notification xml');
         }
 
@@ -62,7 +58,7 @@ class SubscriberController extends Controller
         $Channel = Channels::byId($channelId);
 
         // todo: check if video is a trailer or teaser; if not, skip
-        if (!$Channel->isTrailer($title)) {
+        if (! $Channel->isTrailer($title)) {
             return $this->log('Video is not a trailer or teaser');
         }
 
@@ -91,7 +87,7 @@ class SubscriberController extends Controller
 
         $Video = $this->fetchDetails($Video);
 
-        if (!$Video->media_id) {
+        if (! $Video->media_id) {
             return $this->log('No media found for video, type: ' . $Video->guessType());
         }
 
@@ -103,6 +99,7 @@ class SubscriberController extends Controller
         foreach ($BlueSkyPost->log as $log) {
             ($log->error) ? $this->log('error: ' . $log->message) : $this->log($log->message);
         }
+
         return $this->log('End');
     }
 

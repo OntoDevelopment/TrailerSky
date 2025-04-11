@@ -2,13 +2,10 @@
 
 namespace App\Orchid\Layouts\Channels;
 
+use Orchid\Screen\Actions;
+use Orchid\Screen\Fields;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
-
-use App\Models\Channel;
-
-use Orchid\Screen\Fields;
-use Orchid\Screen\Actions;
 
 class ChannelListLayout extends Table
 {

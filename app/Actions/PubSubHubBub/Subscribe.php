@@ -2,11 +2,9 @@
 
 namespace App\Actions\PubSubHubBub;
 
-use App\Http\YouTube\Channels;
-
-use \Illuminate\Support\Carbon;
-
 use App\Http\Clients\PubSubHubBub;
+use App\Http\YouTube\Channels;
+use Illuminate\Support\Carbon;
 
 class Subscribe extends \App\Actions\AbstractAction
 {
@@ -14,24 +12,24 @@ class Subscribe extends \App\Actions\AbstractAction
     {
         if (isset($params['id'])) {
             $Channel = Channels::byId($params['id']);
-            $this->log("Subscribing to " . $Channel->name());
+            $this->log('Subscribing to ' . $Channel->name());
         } else {
-            $this->log("Subscribing to all channels");
+            $this->log('Subscribing to all channels');
             foreach (Channels::$list as $class) {
                 $this->subscribe($class::$id);
             }
         }
 
-        $this->log("Done at " . Carbon::now());
+        $this->log('Done at ' . Carbon::now());
     }
 
     public function subscribe($id)
     {
         $subscribed = PubSubHubBub::subscribe($id);
         if ($subscribed === true) {
-            $this->log("Subscribed to " . $id);
+            $this->log('Subscribed to ' . $id);
         } else {
-            $this->log("Failed to subscribe to " . $id);
+            $this->log('Failed to subscribe to ' . $id);
         }
     }
 }

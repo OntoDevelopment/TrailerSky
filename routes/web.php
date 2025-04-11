@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', [Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/movies', [Controllers\IndexController::class, 'movies'])->name('movies');

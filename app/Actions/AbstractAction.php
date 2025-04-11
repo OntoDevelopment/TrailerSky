@@ -12,6 +12,7 @@ abstract class AbstractAction
     {
         $Action = new static;
         $Action->run($params);
+
         return $Action;
     }
 
@@ -19,7 +20,7 @@ abstract class AbstractAction
     {
         $this->log[] = (object) [
             'message' => $message,
-            'error' => $error
+            'error' => $error,
         ];
     }
 
@@ -30,6 +31,7 @@ abstract class AbstractAction
                 return true;
             }
         }
+
         return false;
     }
 }

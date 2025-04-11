@@ -4,9 +4,7 @@ namespace App\Console\Commands;
 
 use App\Actions\BlueSky;
 
-use App\Models\Video;
-
-class PostBluesky  extends \Illuminate\Console\Command
+class PostBluesky extends \Illuminate\Console\Command
 {
     /**
      * The name and signature of the console command.
@@ -28,8 +26,8 @@ class PostBluesky  extends \Illuminate\Console\Command
     public function handle(): void
     {
         $Action = BlueSky\PostQueued::exec();
-        foreach($Action->log as $log){
-            if($log->error){
+        foreach ($Action->log as $log) {
+            if ($log->error) {
                 $this->error($log->message);
             } else {
                 $this->info($log->message);

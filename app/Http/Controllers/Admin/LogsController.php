@@ -10,6 +10,7 @@ class LogsController extends AdminController
     {
         // read log from storage/logs/yt_notifications.log
         $log = Storage::disk('logs')->get('yt_notifications.log');
+
         return view('admin.logs.notifications', compact('log'));
     }
 
@@ -20,6 +21,7 @@ class LogsController extends AdminController
         return array_map(function ($file) {
             $data = json_decode(Storage::disk('notifications')->get($file));
             $data->file = $file;
+
             return $data;
         }, $files);
     }

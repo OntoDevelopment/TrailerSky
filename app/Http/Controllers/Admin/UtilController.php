@@ -2,20 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Clients\TMDB;
-use App\Models\Video;
-use App\Models\Media;
-use App\Models\Hashtag;
-
-use \Illuminate\Support\Carbon;
-use Illuminate\Http\Request;
-
 use App\Actions;
+use App\Http\Clients\TMDB;
+use App\Models\Media;
+use App\Models\Video;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class UtilController extends AdminController
 {
-
-
     public function dismiss(Request $request)
     {
         $Video = Video::find($request->id);
@@ -29,7 +24,7 @@ class UtilController extends AdminController
         $Video = Video::find($request->id);
 
         $Media = Media::where('tmdb_id', $request->tmdb_id)->first();
-        if (!$Media) {
+        if (! $Media) {
             $details = false;
             try {
                 $details = TMDB::details($request->tmdb_id, 'tv');
@@ -37,15 +32,16 @@ class UtilController extends AdminController
             } catch (\Exception $e) {
             }
 
-            if (!$details) {
+            if (! $details) {
                 try {
                     $details = TMDB::details($request->tmdb_id, 'movie');
                     $media_type = 'movie';
                 } catch (\Exception $e) {
                 }
             }
-            if (!$details) {
+            if (! $details) {
                 echo 'No details found';
+
                 return;
             }
 
@@ -68,17 +64,17 @@ class UtilController extends AdminController
     public function action(Request $request, $action)
     {
         $actionClass = $this->actionClass($action);
-        if (!$actionClass) {
+        if (! $actionClass) {
             return 'Action not found';
         }
-        $Action = new $actionClass();
+        $Action = new $actionClass;
         $Action->run($request->query());
+
         return view('admin.util.action', compact('Action'));
     }
 
     /**
-     *
-     * @param string $action
+     * @param  string  $action
      * @return \App\Actions\AbstractAction|false
      */
     protected function actionClass($action)

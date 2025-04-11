@@ -3,9 +3,8 @@
 namespace App\Actions\BlueSky;
 
 use App\Actions\AbstractAction;
-
-use App\Models\Video;
 use App\Models\Post;
+use App\Models\Video;
 
 class Queue extends AbstractAction
 {
@@ -17,12 +16,13 @@ class Queue extends AbstractAction
             ->joinMedia()
             ->orderBy('media.tmdb_popularity', 'desc')
             ->first();
-        if (!$Video) {
+        if (! $Video) {
             $this->log('No videos to queue');
+
             return;
         }
 
-        $Post = new Post();
+        $Post = new Post;
         $Post->video_id = $Video->id;
         $Post->platform = 'bluesky';
         $Post->content = $Video->postGenerate(300);

@@ -3,18 +3,16 @@
 namespace App\Actions\Traits;
 
 use App\Http\Clients\TMDB;
-use App\Models\Video;
-use App\Models\Media;
-use App\Models\Hashtag;
-
 use App\Http\YouTube\Channels;
+use App\Models\Hashtag;
+use App\Models\Media;
+use App\Models\Video;
 
 trait FetchesDetails
 {
     /**
      * Fetch details from TMDB and update the video
      *
-     * @param Video $Video
      * @return Video
      */
     protected function fetchDetails(Video $Video)
@@ -24,8 +22,9 @@ trait FetchesDetails
         $this->log("Media title: \"{$media_title}\"");
         $result = TMDB::find($media_title, $Video);
 
-        if (!$result) {
+        if (! $result) {
             $this->log("No results found on TMDB. Type: {$Video->guessType('multi')}");
+
             return;
         } else {
             $this->log("TMDB: {$result['id']}");
@@ -37,6 +36,7 @@ trait FetchesDetails
         $Media = $this->syncTMDB($Media);
         $Video->media_id = $Media->id;
         $Video->save();
+
         return $Video;
     }
 
@@ -44,7 +44,7 @@ trait FetchesDetails
     {
         $details = TMDB::details($Media->tmdb_id, $Media->media_type);
         $Media->tmdb_popularity = round($details['popularity'], 3);
-        if(!empty($details['imdb_id'])) {
+        if (! empty($details['imdb_id'])) {
             $Media->imdb_id = $details['imdb_id'];
         }
         if (TMDB::bestAirdate($details)) {
@@ -64,13 +64,14 @@ trait FetchesDetails
         $Media->hashtags()->sync($hashtags);
 
         $Media->save();
+
         return $Media;
     }
 
     protected function findMedia($result)
     {
         $Media = Media::where('tmdb_id', $result['id'])->first();
-        if (!$Media) {
+        if (! $Media) {
             $title = $result['media_type'] == 'movie' ? $result['title'] : $result['name'];
             $Media = new Media([
                 'title' => $title,
@@ -80,6 +81,7 @@ trait FetchesDetails
         }
 
         $Media->save();
+
         return $Media;
     }
 }

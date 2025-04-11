@@ -1,8 +1,8 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Video;
-
 use Illuminate\Http\Request;
 
 class VideoController extends Controller
@@ -11,7 +11,7 @@ class VideoController extends Controller
     {
         $video = Video::findOrfail($id);
         $title = $video->title;
-        switch($video->type){
+        switch ($video->type) {
             case 'trailer':
                 $title .= 'Official Trailer';
                 break;
@@ -20,6 +20,7 @@ class VideoController extends Controller
                 break;
         }
         $title .= ' #TrailerSky';
+
         return view('video', compact('video', 'title'));
     }
 }

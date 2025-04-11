@@ -2,19 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
-
 use App\Http\YouTube\Channels;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 /**
  * @property string $id
  * @property string $name
- * @property \Illuminate\Support\Carbon  $last_query
+ * @property \Illuminate\Support\Carbon $last_query
  * @property int $wait_hours
  */
 class Channel extends AppModel
 {
     public $incrementing = false;
+
     protected $keyType = 'string';
 
     /**
@@ -26,6 +26,7 @@ class Channel extends AppModel
     {
         $casts = parent::casts();
         $casts['last_query'] = 'datetime';
+
         return $casts;
     }
 
@@ -37,11 +38,11 @@ class Channel extends AppModel
     public function url(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => 'https://www.youtube.com/channel/' . $this->id
+            get: fn ($value) => 'https://www.youtube.com/channel/' . $this->id
         );
     }
 
-    public function getUrl() : string
+    public function getUrl(): string
     {
         return 'https://www.youtube.com/channel/' . $this->id;
     }

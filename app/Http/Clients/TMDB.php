@@ -2,9 +2,8 @@
 
 namespace App\Http\Clients;
 
-use \Illuminate\Support\Carbon;
-
 use App\Models\Video;
+use Illuminate\Support\Carbon;
 
 class TMDB extends Client
 {
@@ -47,6 +46,7 @@ class TMDB extends Client
         if (stripos($str, 'episodes') !== false) {
             return 'tv';
         }
+
         return false;
     }
 
@@ -56,9 +56,10 @@ class TMDB extends Client
         $results = TMDB::search($title, $media_type);
         // set media type to movie if it's a movie
         $results = array_map(function ($result) use ($media_type) {
-            if(empty($result['media_type'])) {
+            if (empty($result['media_type'])) {
                 $result['media_type'] = $media_type;
             }
+
             return $result;
         }, $results);
         // filter out results with non-matching title
@@ -79,13 +80,14 @@ class TMDB extends Client
             if ($result['media_type'] == 'tv') {
                 return true;
             }
-            if(empty($result['release_date'])){
+            if (empty($result['release_date'])) {
                 return true; // release date is probably not announced yet or input into TMDB
             }
             // if release date is in the future, return true
-            if (!empty($result['release_date']) && Carbon::parse($result['release_date'])->isFuture()) {
+            if (! empty($result['release_date']) && Carbon::parse($result['release_date'])->isFuture()) {
                 return true;
             }
+
             return false;
         });
 
@@ -97,23 +99,25 @@ class TMDB extends Client
         foreach ($results as $result) {
             return $result;
         }
+
         return null;
     }
 
     public static function bestAirdate($details)
     {
-        if (!empty($details['media_type']) && $details['media_type'] == 'movie' && !empty($details['release_date'])) {
+        if (! empty($details['media_type']) && $details['media_type'] == 'movie' && ! empty($details['release_date'])) {
             return $details['release_date'];
         }
-        if (!empty($details['next_episode_to_air']) && !empty($details['next_episode_to_air']['air_date'])) {
+        if (! empty($details['next_episode_to_air']) && ! empty($details['next_episode_to_air']['air_date'])) {
             return $details['next_episode_to_air']['air_date'];
         }
-        if (!empty($details['last_episode_to_air']) && !empty($details['last_episode_to_air']['air_date'])) {
+        if (! empty($details['last_episode_to_air']) && ! empty($details['last_episode_to_air']['air_date'])) {
             return $details['last_episode_to_air']['air_date'];
         }
-        if (!empty($details['first_air_date'])) {
+        if (! empty($details['first_air_date'])) {
             return $details['first_air_date'];
         }
+
         return null;
     }
 

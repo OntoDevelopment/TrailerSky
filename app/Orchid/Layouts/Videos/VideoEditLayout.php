@@ -2,8 +2,8 @@
 
 namespace App\Orchid\Layouts\Videos;
 
-use Orchid\Screen\Fields;
 use Orchid\Screen\Actions;
+use Orchid\Screen\Fields;
 use Orchid\Support\Color;
 
 class VideoEditLayout extends \Orchid\Screen\Layouts\Rows

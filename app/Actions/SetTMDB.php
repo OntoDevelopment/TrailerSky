@@ -2,39 +2,39 @@
 
 namespace App\Actions;
 
-use App\Actions\AbstractAction;
-
 use App\Http\Clients\TMDB;
-
-use App\Models\Video;
 use App\Models\Media;
+use App\Models\Video;
 
 class SetTMDB extends AbstractAction
 {
     public function run($params = [])
     {
         $this->log('Running set TMDB ID');
-        if (!isset($params['id'])) {
+        if (! isset($params['id'])) {
             $this->log('No ID provided', true);
+
             return;
         }
         $id = $params['id'];
 
-        if (!isset($params['tmdb_id'])) {
+        if (! isset($params['tmdb_id'])) {
             $this->log('No TMDB ID provided', true);
+
             return;
         }
         $tmdb_id = $params['tmdb_id'];
 
         $Video = Video::find($params['id']);
 
-        if (!$Video) {
+        if (! $Video) {
             $this->log('Video not found', true);
+
             return;
         }
 
         $Media = Media::where('tmdb_id', $tmdb_id)->first();
-        if (!$Media) {
+        if (! $Media) {
             $details = false;
             try {
                 $details = TMDB::details($tmdb_id, 'tv');
@@ -43,7 +43,7 @@ class SetTMDB extends AbstractAction
                 $this->log($e->getMessage(), true);
             }
 
-            if (!$details) {
+            if (! $details) {
                 try {
                     $details = TMDB::details($tmdb_id, 'movie');
                     $media_type = 'movie';
@@ -51,8 +51,9 @@ class SetTMDB extends AbstractAction
                     $this->log($e->getMessage(), true);
                 }
             }
-            if (!$details) {
+            if (! $details) {
                 $this->log('No details found', true);
+
                 return;
             }
 

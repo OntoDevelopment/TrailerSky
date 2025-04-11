@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Actions\PubSubHubBub;
 
-class Subscribe  extends \Illuminate\Console\Command
+class Subscribe extends \Illuminate\Console\Command
 {
     /**
      * The name and signature of the console command.
@@ -26,8 +26,8 @@ class Subscribe  extends \Illuminate\Console\Command
     public function handle(): void
     {
         $Action = PubSubHubBub\Subscribe::exec();
-        foreach($Action->log as $log){
-            if($log->error){
+        foreach ($Action->log as $log) {
+            if ($log->error) {
                 $this->error($log->message);
             } else {
                 $this->info($log->message);

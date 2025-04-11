@@ -4,12 +4,12 @@ namespace App\Entities;
 
 use App\Http\YouTube\Channels;
 use App\Models\Video;
-
-use \Illuminate\Support\Carbon;
+use Illuminate\Support\Carbon;
 
 class YouTubeVideo
 {
     public $data = [];
+
     public function __construct($data)
     {
         $this->data = $data;
@@ -65,6 +65,7 @@ class YouTubeVideo
         if (isset($t['default'])) {
             return $t['default'];
         }
+
         return null;
     }
 
@@ -92,15 +93,16 @@ class YouTubeVideo
     public function model(): Video
     {
         $Video = Video::find($this->id());
-        if (!$Video) {
+        if (! $Video) {
             $Video = $this->make();
         }
+
         return $Video;
     }
 
     public function make(): Video
     {
-        $Video = new Video();
+        $Video = new Video;
         $Video->id = $this->id();
         $Video->title = $this->title();
         $Video->description = $this->description();

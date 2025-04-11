@@ -2,11 +2,10 @@
 
 namespace App\Orchid\Layouts\Media;
 
-use Orchid\Screen\Field;
-use Orchid\Screen\Layouts\Rows;
-
-use Orchid\Screen\Fields;
 use Orchid\Screen\Actions;
+use Orchid\Screen\Field;
+use Orchid\Screen\Fields;
+use Orchid\Screen\Layouts\Rows;
 use Orchid\Support\Color;
 
 class MediaEditLayout extends Rows

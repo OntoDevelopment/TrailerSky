@@ -4,9 +4,7 @@ namespace App\Models;
 
 use App\Http\Clients\TMDB;
 use Illuminate\Database\Eloquent\Builder;
-
 use Illuminate\Database\Eloquent\Casts\Attribute;
-
 use Orchid\Filters\Types as Filters;
 
 /**
@@ -21,18 +19,18 @@ use Orchid\Filters\Types as Filters;
  * @property Media $media
  * @property Post[] $posts
  */
-
 class Video extends AppModel
 {
     public $incrementing = false;
+
     protected $keyType = 'string';
 
     protected $allowedFilters = [
         'title' => Filters\Like::class,
         'description' => Filters\Like::class,
         'type' => Filters\WhereIn::class,
-        'created_at'    => Filters\WhereDateStartEnd::class,
-        'updated_at'    => Filters\WhereDateStartEnd::class,
+        'created_at' => Filters\WhereDateStartEnd::class,
+        'updated_at' => Filters\WhereDateStartEnd::class,
     ];
 
     protected $allowedSorts = [
@@ -45,8 +43,8 @@ class Video extends AppModel
     public function title(): Attribute
     {
         return Attribute::make(
-            set: fn(string $value) => sublen(html_entity_decode(asci_chars($value)), 100),
-            get: fn($value) => html_entity_decode($value)
+            set: fn (string $value) => sublen(html_entity_decode(asci_chars($value)), 100),
+            get: fn ($value) => html_entity_decode($value)
         );
     }
 
@@ -58,6 +56,7 @@ class Video extends AppModel
     public function guessType($unknown = 'unknown'): string
     {
         $type = TMDB::guessType($this);
+
         return $type ? $type : $unknown;
     }
 
@@ -71,7 +70,7 @@ class Video extends AppModel
     public function channelName(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $this->channel->name ?? 'unknown'
+            get: fn ($value) => $this->channel->name ?? 'unknown'
         );
     }
 
@@ -143,7 +142,7 @@ class Video extends AppModel
         $query->orderBy('hot', 'desc')->limit($limit);
     }
 
-    public function scopeHot(Builder $query, $limit = 8, $weight =  20): void
+    public function scopeHot(Builder $query, $limit = 8, $weight = 20): void
     {
         $query->hottest($limit, $weight)
             ->whereRaw('media.tmdb_popularity - (TIMESTAMPDIFF(HOUR, videos.created_at, NOW()) * ?) > 0', [$weight]);
@@ -178,14 +177,16 @@ class Video extends AppModel
             }
         }
         if ($with_url) {
-            $post .= " " . $this->youtubeUrl();
+            $post .= ' ' . $this->youtubeUrl();
         }
+
         return $post;
     }
 
     public function postBlueSky()
     {
         $text = $this->postGenerate(300);
+
         return 'https://bsky.app/intent/compose?text=' . urlencode($text);
     }
 
@@ -197,7 +198,7 @@ class Video extends AppModel
         if ($this->media->media_type == 'movie') {
             $hashtags[] = ($this->type == 'trailer') ? '#MovieTrailer' : '#MovieTeaser';
             $hashtags[] = '#FilmSky';
-        } else if ($this->media->media_type == 'tv') {
+        } elseif ($this->media->media_type == 'tv') {
             $hashtags[] = ($this->type == 'trailer') ? '#ShowTrailer' : '#ShowTeaser';
         }
         if ($this->channel) {
@@ -217,8 +218,7 @@ class Video extends AppModel
     }
 
     /**
-     *
-     * @param string $size (mqdefault, maxresdefault, sddefault, hqdefault, default)
+     * @param  string  $size  (mqdefault, maxresdefault, sddefault, hqdefault, default)
      * @return string
      */
     public function youtubeThumbnail(string $size = 'mqdefault')
@@ -229,6 +229,7 @@ class Video extends AppModel
     public function youtubeThumbnailPath()
     {
         \App\Helpers\Thumbnail::get($this->id);
+
         return \App\Helpers\Thumbnail::fullPath($this->id);
     }
 

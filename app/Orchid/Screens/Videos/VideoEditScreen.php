@@ -2,14 +2,10 @@
 
 namespace App\Orchid\Screens\Videos;
 
-use Orchid\Screen\Screen;
-
 use App\Models\Video;
-
 use Illuminate\Http\Request;
+use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Toast;
-
-use App\Http\Clients\TMDB;
 
 /**
  * @property Video $video
@@ -17,6 +13,7 @@ use App\Http\Clients\TMDB;
 class VideoEditScreen extends Screen
 {
     public $video;
+
     /**
      * Fetch data to be displayed on the screen.
      *
@@ -31,12 +28,10 @@ class VideoEditScreen extends Screen
 
     /**
      * The name of the screen displayed in the header.
-     *
-     * @return string|null
      */
     public function name(): ?string
     {
-        // you should never be creating a video... 
+        // you should never be creating a video...
         return $this->video->exists ? 'Edit Video' : 'Create Video';
     }
 
@@ -84,16 +79,16 @@ class VideoEditScreen extends Screen
             'tmdb_id' => $request->input('tmdb_id'),
         ]);
         $error = false;
-        foreach($Action->log as $log){
-            if($log->error){
+        foreach ($Action->log as $log) {
+            if ($log->error) {
                 $error = true;
                 Toast::error($log->message);
             } else {
                 Toast::info($log->message);
             }
         }
-        
-        if(!$error){
+
+        if (! $error) {
             return redirect()->route('platform.videos');
         }
     }

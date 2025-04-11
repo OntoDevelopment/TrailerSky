@@ -2,15 +2,16 @@
 
 namespace App\Http\YouTube;
 
+use App\Entities\VideoType;
 use App\Http\Clients\YouTube;
-
-use \App\Entities\VideoType;
 
 abstract class Channel
 {
     public static $id;
+
     public static $hashtags = '';
-    public static $titleDividers = ['|', '–', '—', '-',];
+
+    public static $titleDividers = ['|', '–', '—', '-'];
 
     public function __construct(public $name = '') {}
 
@@ -29,6 +30,7 @@ abstract class Channel
         if ($publishedAfter) {
             $query['publishedAfter'] = $publishedAfter;
         }
+
         return $query;
     }
 
@@ -59,6 +61,7 @@ abstract class Channel
         if (stripos($after, 'Trailer') !== false) {
             return new VideoType\Trailer;
         }
+
         return new VideoType\Undefined;
     }
 
@@ -79,6 +82,7 @@ abstract class Channel
         if (is_season($title)) {
             $title = strip_season($title);
         }
+
         return $title;
     }
 

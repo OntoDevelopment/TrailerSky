@@ -21,6 +21,7 @@ class Thumbnail
     public static function getBlob($id)
     {
         $path = self::get($id);
+
         return Storage::disk('public')->get($path);
     }
 
@@ -36,6 +37,7 @@ class Thumbnail
     public static function save($id)
     {
         $saved = Storage::disk('public')->put(self::path($id), self::fetch($id));
+
         return self::path($id);
     }
 
@@ -47,6 +49,7 @@ class Thumbnail
         curl_setopt($ch, CURLOPT_HEADER, 0);
         $content = curl_exec($ch);
         curl_close($ch);
+
         return $content;
     }
 }

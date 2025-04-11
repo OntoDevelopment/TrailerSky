@@ -3,9 +3,7 @@
 namespace App\Actions\BlueSky;
 
 use App\Actions\AbstractAction;
-
 use App\Http\Clients\BlueSky;
-
 use App\Models\Post as PostModel;
 
 class PostQueued extends AbstractAction
@@ -19,9 +17,10 @@ class PostQueued extends AbstractAction
             ->whereNull('platform_id')
             ->where('created_at', '>', now())
             ->first();
-            
-        if (!$Post) {
+
+        if (! $Post) {
             $this->log('No queued posts found', true);
+
             return;
         }
 
@@ -29,6 +28,7 @@ class PostQueued extends AbstractAction
             $response = BlueSky::post($Post);
         } catch (\Exception $e) {
             $this->log($e->getMessage(), true);
+
             return;
         }
         $this->log('Posted to BlueSky');
