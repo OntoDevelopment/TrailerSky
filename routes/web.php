@@ -18,7 +18,6 @@ Route::get('/subscriber/notify', [Controllers\SubscriberController::class, 'veri
 Route::post('/subscriber/notify', [Controllers\SubscriberController::class, 'notify'])->name('subscriber.notify');
 
 Route::middleware([\Orchid\Platform\Http\Middleware\Access::class])->prefix('admin-x')->group(function () {
-    Route::get('/', [Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/runplaceholder', [Controllers\Admin\DashboardController::class, 'runplaceholder'])->name('admin.runplaceholder');
     Route::get('/util/action/{action}', [Controllers\Admin\UtilController::class, 'action'])->name('admin.util.action');
     Route::get('/util/dismiss', [Controllers\Admin\UtilController::class, 'dismiss'])->name('admin.util.dismiss');

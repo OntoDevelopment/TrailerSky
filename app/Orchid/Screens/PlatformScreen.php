@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Orchid\Screens;
 
+use App\Models\Video;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 
@@ -24,7 +25,7 @@ class PlatformScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Get Started';
+        return 'Dashboard';
     }
 
     /**
@@ -32,7 +33,7 @@ class PlatformScreen extends Screen
      */
     public function description(): ?string
     {
-        return 'Welcome to your Orchid application.';
+        return '';
     }
 
     /**
@@ -52,9 +53,13 @@ class PlatformScreen extends Screen
      */
     public function layout(): iterable
     {
+        $vars = [
+            'to_post' => Video::toPost()->get(),
+            'to_review' => Video::toReview()->get(),
+        ];
+
         return [
-            Layout::view('platform::partials.update-assets'),
-            Layout::view('platform::partials.welcome'),
+            Layout::view('admin.dashboard', $vars),
         ];
     }
 }
