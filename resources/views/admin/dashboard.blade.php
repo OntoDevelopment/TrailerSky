@@ -1,4 +1,5 @@
 <div class="dashboard">
+    <form action=""><!-- decoy form for Orchid to break --></form>
     <div class="btn-group">
         <a href="{{ route('admin.util.action', ['scrapeYouTubeChannels']) }}" class="btn btn-primary" target="run">Scrape Channels</a>
         <a href="{{ route('admin.util.action', 'fetchYouTubeDetails') }}" class="btn btn-info" target="run">Get Video Details</a>
@@ -7,6 +8,7 @@
     </div>
     <iframe id="run" name="run" src="{{ route('admin.runplaceholder') }}" class="resizable-vertical border w-100"></iframe>
     <form method="get" action="{{ route('admin.util.action', ['importYouTube']) }}" target="run" class="my-3 p-3 border">
+        {{ csrf_field() }}
         <div class="input-group">
             <input type="text" name="id" class="form-control" placeholder="Import YouTube video by ID" required>
             <button type="submit" class="btn btn-primary">Import Video</button>
