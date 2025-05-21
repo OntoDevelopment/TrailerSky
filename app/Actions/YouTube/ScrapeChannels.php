@@ -19,7 +19,7 @@ class ScrapeChannels extends \App\Actions\AbstractAction
         } else {
             $this->log('Scraping all channels');
             foreach (Channels::$list as $class) {
-                $this->scrapeChannel($class::$id);
+                $this->scrapeChannel($class::$id, $params['force'] ?? false);
             }
         }
         $this->log('Done at ' . Carbon::now());

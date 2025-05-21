@@ -1,7 +1,7 @@
 <div class="dashboard">
     <form action=""><!-- decoy form for Orchid to break --></form>
     <div class="btn-group">
-        <a href="{{ route('admin.util.action', ['scrapeYouTubeChannels']) }}" class="btn btn-primary" target="run">Scrape Channels</a>
+        <a href="{{ route('admin.util.action', ['scrapeYouTubeChannels', 'force' => 1]) }}" class="btn btn-primary" target="run">Scrape Channels</a>
         <a href="{{ route('admin.util.action', 'fetchYouTubeDetails') }}" class="btn btn-info" target="run">Get Video Details</a>
         <a href="{{ route('admin.util.action', 'updateMedia') }}" class="btn btn-secondary" target="run">Sync Media to TMDB</a>
         <a href="{{ route('admin.logs.notifications') }}" class="btn btn-danger" target="run">Notifications</a>
