@@ -67,6 +67,7 @@ class VideoEditScreen extends Screen
         $video->type = $request->input('video.type');
         $video->save();
         Toast::info('Video was saved');
+        return redirect()->refresh();
     }
 
     public function setTMDB(Video $video, Request $request)
