@@ -54,6 +54,7 @@ class ScrapeChannels extends \App\Actions\AbstractAction
         }
 
         $this->log('Results: ' . count($results));
+        $last_query = Carbon::now();
         foreach ($results as $result) {
             $YouTubeVideo = new YouTubeVideo($result);
             $Video = Video::find($YouTubeVideo->id());
@@ -64,10 +65,11 @@ class ScrapeChannels extends \App\Actions\AbstractAction
             if (in_array($Video->type, ['trailer', 'teaser'])) {
                 $this->fetchDetails($Video);
             }
+            $last_query = $YouTubeVideo->created_at();
         }
 
         // update last query time
-        $ChannelModel->last_query = Carbon::now();
+        $ChannelModel->last_query = $last_query;
         $ChannelModel->save();
     }
 }
