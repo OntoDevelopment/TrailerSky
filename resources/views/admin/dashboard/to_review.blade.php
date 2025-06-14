@@ -9,7 +9,7 @@
         @foreach ($to_review as $Video)
             <tr>
                 <td>
-                    {{ $Video->title }} <a href="{{ $Video->youtubeUrl() }}" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a href="{{ $Video->youtubeUrl() }}" target="_blank">{{ $Video->title }}</a>
                     <br />{{ $Video->channel_name }} at {{ $Video->created_at->format('F jS, Y g:i A') }}
                 </td>
                 <td>
