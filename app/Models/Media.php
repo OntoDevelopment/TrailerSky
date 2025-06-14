@@ -37,7 +37,7 @@ class Media extends AppModel
     // hasmany hashtags through media_hashtags
     public function hashtags()
     {
-        return $this->belongsToMany(Hashtag::class, 'media_hashtags')->orderBy('rank', 'desc');
+        return $this->belongsToMany(Hashtag::class, 'media_hashtags')->orderBy('rank', 'desc')->where('rank', '>', 0);
     }
 
     // hasmany videos
