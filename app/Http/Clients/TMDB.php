@@ -5,6 +5,8 @@ namespace App\Http\Clients;
 use App\Models\Video;
 use Illuminate\Support\Carbon;
 
+use Illuminate\Support\Facades\Cache;
+
 class TMDB extends Client
 {
     public static function base(): string
@@ -123,13 +125,16 @@ class TMDB extends Client
 
     public static function details($id, $type)
     {
-        $url = self::base() . $type . '/' . $id;
-        $response = self::withHeaders(static::headers())->get($url);
+        $url = self::base() . $type . '/' . $id . '?append_to_response=credits';
+        return Cache::remember($url, 60 * 60, function () use ($url) {
+            $response = self::withHeaders(static::headers())->get($url);
 
-        if ($response->successful()) {
-            return $response->json();
-        }
-        $response->throw();
+            if ($response->successful()) {
+                return $response->json();
+            }
+            dd("Error fetching TMDB details for $url", $response->status(), $response->body());
+            $response->throw();
+        });
     }
 
     protected static function headers()
