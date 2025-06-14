@@ -27,14 +27,14 @@ class Hashtag extends Model
         );
     }
 
-    public static function lookup($text, $default_rank = 10)
+    public static function lookup($text, $rank = 10)
     {
         $text = hashtag($text);
         $Hashtag = Hashtag::where('text', $text)->first();
         if (! $Hashtag) {
             $Hashtag = new Hashtag;
             $Hashtag->text = $text;
-            $Hashtag->rank = $default_rank;
+            $Hashtag->rank = round($rank);
             $Hashtag->save();
         }
 
