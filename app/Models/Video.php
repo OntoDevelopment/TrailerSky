@@ -90,7 +90,7 @@ class Video extends AppModel
     {
         $query->whereIn('videos.type', ['trailer', 'teaser'])
             ->whereNotNull('videos.media_id')
-            ->where('videos.created_at', '>', now()->subDays(2))
+            ->where('videos.created_at', '>', now()->subDays(6))
             //->orderBy('created_at', 'desc')
             // has no posts
             ->whereDoesntHave('posts')
