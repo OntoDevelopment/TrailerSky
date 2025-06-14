@@ -37,7 +37,7 @@ class Post extends AbstractAction
 
             return;
         }
-        $this->log('Posted to BlueSky');
+        $this->log('Posted to BlueSky: ' . $Video->title);
 
         $Post->platform_id = $response->getCid();
         $Post->save();
