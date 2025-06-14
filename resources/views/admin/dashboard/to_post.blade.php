@@ -12,6 +12,7 @@
                 <td>
                     <a href="{{ $Video->youtubeUrl() }}" target="_blank">{{ $Video->title }}</a>
                     <br />{{ $Video->channel_name }} at {{ $Video->created_at->format('F jS, Y g:i A') }}
+                    <textarea class="form-control">{{ $Video->postGenerate() }}</textarea>
                 </td>
                 <td>
                     <a href="{{ $Video->media->tmdb_url }}" target="_blank">TMDB</a> | Popularity: {{ $Video->media->tmdb_popularity }}
