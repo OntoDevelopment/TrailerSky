@@ -57,6 +57,9 @@ trait FetchesDetails
         foreach ($details['genres'] as $genre) {
             $hashtags[] = Hashtag::lookup($genre['name'], 10);
         }
+        foreach($details['credits']['cast'] as $cast) {
+            $hashtags[] = Hashtag::lookup($cast['name'], $cast['popularity'] ?? 0);
+        }
         foreach ($details['production_companies'] as $company) {
             $hashtags[] = Hashtag::lookup($company['name'], 1);
         }
