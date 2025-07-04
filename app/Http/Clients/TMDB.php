@@ -132,7 +132,6 @@ class TMDB extends Client
             if ($response->successful()) {
                 return $response->json();
             }
-            dd("Error fetching TMDB details for $url", $response->status(), $response->body());
             $response->throw();
         });
     }
