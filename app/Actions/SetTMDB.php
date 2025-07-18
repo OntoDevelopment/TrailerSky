@@ -18,7 +18,6 @@ class SetTMDB extends AbstractAction
 
             return;
         }
-        $id = $params['id'];
 
         if (! isset($params['tmdb_id'])) {
             $this->log('No TMDB ID provided', true);
