@@ -8,6 +8,8 @@ use App\Models\Video;
 
 class SetTMDB extends AbstractAction
 {
+    use Traits\FetchesDetails;
+
     public function run($params = [])
     {
         $this->log('Running set TMDB ID');
@@ -67,6 +69,7 @@ class SetTMDB extends AbstractAction
             ]);
             $Media->save();
         }
+        $Media = $this->syncTMDB($Media);
 
         $Video->media_id = $Media->id;
 
