@@ -90,7 +90,7 @@ class VideoEditScreen extends Screen
         }
 
         if (! $error) {
-            return redirect()->route('platform.videos');
+            return redirect()->route('platform.videos', ['video' => $video->id]);
         }
     }
 }
