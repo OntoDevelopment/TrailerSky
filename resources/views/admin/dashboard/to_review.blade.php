@@ -14,7 +14,6 @@
                 </td>
                 <td>
                     <div class="btn-group">
-                        <a href="{{ route('admin.util.action', ['fetchYouTubeDetails', 'id' => $Video->id]) }}" class="btn btn-success" target="run">Get Data</a>
                         <x-dismiss id="{{ $Video->id }}">Reject</x-dismiss>
                         <form action="{{ route('admin.util.set_tmdb_id') }}" method="GET" style="display: inline;" target="run">
                             @csrf
