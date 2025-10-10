@@ -54,6 +54,7 @@ class UtilController extends AdminController
                 'release_date' => TMDB::bestAirdate($details),
             ]);
             $Media->save();
+            \App\Actions\TMDB\UpdateMedia::exec(['id' => $Media->id]);
         }
 
         $Video->media_id = $Media->id;
