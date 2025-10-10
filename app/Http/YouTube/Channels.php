@@ -35,6 +35,7 @@ class Channels
         'Sony Pictures Entertainment' => Sony::class,
         'Star Wars' => StarWars::class,
         'Universal Pictures' => Universal::class,
+        'Walt Disney Animation Studios' => WaltDisneyAnimationStudios::class,
         'Warner Bros. Pictures' => WarnerBros::class,
 
     ];
