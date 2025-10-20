@@ -51,13 +51,14 @@ trait FetchesDetails
             $Media->release_date = TMDB::bestAirdate($details);
         }
         $Media->tmdb_poster_path = $details['poster_path'] ?? null;
+        $Media->original_language = $details['original_language'] ?? null; // iso_639_1
 
         // build hashtags
         $hashtags = [];
         foreach ($details['genres'] as $genre) {
             $hashtags[] = Hashtag::lookup($genre['name'], 10);
         }
-        foreach($details['credits']['cast'] as $cast) {
+        foreach ($details['credits']['cast'] as $cast) {
             $hashtags[] = Hashtag::lookup($cast['name'], $cast['popularity'] ?? 0);
         }
         foreach ($details['production_companies'] as $company) {
