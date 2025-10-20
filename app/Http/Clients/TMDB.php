@@ -4,7 +4,6 @@ namespace App\Http\Clients;
 
 use App\Models\Video;
 use Illuminate\Support\Carbon;
-
 use Illuminate\Support\Facades\Cache;
 
 class TMDB extends Client
@@ -126,6 +125,7 @@ class TMDB extends Client
     public static function details($id, $type)
     {
         $url = self::base() . $type . '/' . $id . '?append_to_response=credits';
+
         return Cache::remember($url, 60 * 60, function () use ($url) {
             $response = self::withHeaders(static::headers())->get($url);
 

@@ -46,7 +46,7 @@ class ScrapeChannels extends \App\Actions\AbstractAction
 
         try {
             // get videos since last query
-            $results = $channel->getRecent( $ChannelModel->last_query->subHour(7)->format(ZULU) );
+            $results = $channel->getRecent($ChannelModel->last_query->subHour(7)->format(ZULU));
         } catch (\Exception $e) {
             $this->log('Error: ' . $e->getMessage(), true);
 
