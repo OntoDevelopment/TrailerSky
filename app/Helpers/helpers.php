@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\iso_639_1;
 use Carbon\Carbon;
 
 if (! defined('ZULU')) {
@@ -93,4 +94,9 @@ function sublen($string, $length)
 function asci_chars($string)
 {
     return preg_replace('/[^\x20-\x7E]/', '', $string);
+}
+
+function iso_639_1($code)
+{
+    return iso_639_1::get($code);
 }
