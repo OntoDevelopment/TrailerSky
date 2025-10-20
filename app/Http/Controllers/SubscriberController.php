@@ -92,6 +92,10 @@ class SubscriberController extends Controller
         }
 
         if ($Video->media->tmdb_popularity < 5) {
+        if ($Video->media->original_language != 'en') {
+            return $this->log('Media is not English: ' . $Video->media->original_language);
+        }
+
             return $this->log('Media popularity is too low: ' . $Video->media->tmdb_popularity);
         }
 
