@@ -99,6 +99,10 @@ class SubscriberController extends Controller
             return $this->log('Media popularity is too low: ' . $Video->media->tmdb_popularity);
         }
 
+        if ($Video->media->hashtags()->where('text', 'documentary')->exists()) {
+            return $this->log('Media is a documentary, skipping.');
+        }
+
         $BlueSkyPost = \App\Actions\BlueSky\Post::exec(['id' => $Video->id]);
         foreach ($BlueSkyPost->log as $log) {
             ($log->error) ? $this->log('error: ' . $log->message) : $this->log($log->message);
