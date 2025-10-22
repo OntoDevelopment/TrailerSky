@@ -43,8 +43,8 @@ class Video extends AppModel
     public function title(): Attribute
     {
         return Attribute::make(
-            set: fn(string $value) => $this->titleSet($value),
-            get: fn($value) => html_entity_decode($value)
+            set: fn (string $value) => $this->titleSet($value),
+            get: fn ($value) => html_entity_decode($value)
         );
     }
 
@@ -54,6 +54,7 @@ class Video extends AppModel
         $value = ascii_chars($value);
         $value = html_entity_decode($value);
         $value = sublen($value, 100);
+
         return $value;
     }
 
