@@ -104,6 +104,9 @@ class Video extends AppModel
             //->orderBy('created_at', 'desc')
             // has no posts
             ->whereDoesntHave('posts')
+            ->whereDoesntHave('media.hashtags', function (Builder $q) {
+                $q->where('text', 'documentary');
+            })
             ->limit(50);
     }
 
