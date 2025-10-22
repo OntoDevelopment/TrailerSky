@@ -91,7 +91,7 @@ function sublen($string, $length)
     return trim(substr(trim($string), 0, $length));
 }
 
-function asci_chars($string)
+function ascii_chars($string)
 {
     return preg_replace('/[^\x20-\x7E]/', '', $string);
 }
