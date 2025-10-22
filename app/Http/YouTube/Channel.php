@@ -67,6 +67,10 @@ abstract class Channel
 
     public function isTrailer($title): bool
     {
+        if (stripos($title, 'podcast') !== false) {
+            return false;
+        }
+
         return in_array($this->videoType($title)::enum(), ['trailer', 'teaser']);
     }
 
