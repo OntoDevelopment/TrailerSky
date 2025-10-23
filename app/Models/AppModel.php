@@ -34,7 +34,7 @@ class AppModel extends Model
         }
 
         return Attribute::make(
-            set: fn (string $value) => sublen(asci_chars($value), $length),
+            set: fn (string $value) => sublen(ascii_chars($value), $length),
             get: $get
         );
     }
